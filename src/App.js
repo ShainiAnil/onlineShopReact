@@ -1,25 +1,52 @@
-import logo from './logo.svg';
-import './App.css';
+import Header from "./components/Header";
+import Main from "./components/Main";
+import Footer from "./components/Footer";
+//import productData from "./data.json"
+import {  useEffect, useReducer } from "react";
+import { Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import CartPage from "./pages/CartPage";
+import ProductPage from "./pages/ProductPage";
+import { AppContext } from "./context/AppContext";
+import {reducer, initialState} from "./context/AppReducer"
 
-function App() {
+const App = () => {
+
+  const [state,dispatch] = useReducer(reducer,initialState)
+
+  //console.log(state)
+  
+  // const getProductData = async () => {
+  //   let res = await fetch("http://localhost:4000/products");
+  //   let data = await res.json();
+  //   return data
+  // };
+
+  // useEffect(() => {
+  //   getProductData().then(function(data){
+  //     dispatch({
+  //       type:"PRODUCTS_LOADED",
+  //       payload:data
+  //     })
+  //   });
+  // }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+
+    <AppContext.Provider value={{state,dispatch}}>
+    <div className="appWrapper">
+      <Header />
+      <Main>
+        <Routes>
+          <Route path="/onlineShopReact" element={<Home />} />
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="product/:id" element={<ProductPage />}/>
+        </Routes>
+      </Main>
+      <Footer />
     </div>
+    </AppContext.Provider>
   );
-}
+};
 
 export default App;
